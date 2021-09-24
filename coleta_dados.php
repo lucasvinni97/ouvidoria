@@ -16,23 +16,28 @@
             <ul>
                 <li><a href="index.php">Início</a></li>
                 <li><a href="#">Relatórios</a></li>
-                <li><a href="#">Reclamações</a></li>
+                <li><a href="">Reclamações</a></li>
             </ul>
         </nav>
 
     <section id="corpo">
         <div class="painel">
         <?php
-            if (isset($_POST['nome'], $_POST['sobrenome'], $_POST['email'], $_POST['mensagem'])) {
+            if (isset($_POST['nome'], $_POST['sobrenome'], $_POST['email'], $_POST['mensagem'], $_POST['nascimento'])) {
+            // DEFINE O FUSO HORARIO COMO O HORARIO DE BRASILIA
+                date_default_timezone_set('America/Sao_Paulo');
+
+                $data = date("d/m/Y H:i");
                 $nome = $_POST['nome'];
                 $sobrenome = $_POST['sobrenome'];
                 $email = $_POST['email'];
                 $mensagem = $_POST['mensagem'];
+                $nascimento = $_POST['nascimento'];
 
-                if (empty($nome) && empty($sobrenome) && empty($email) && empty($mensagem)) {
+                if (empty($nome) && empty($sobrenome) && empty($email) && empty($mensagem) && empty($nascimento)) {
                     echo "<h5>Você deve preencher os campos do formulário!</h5>";
                 } else {
-                    $sql = "INSERT INTO dados (nome, sobrenome, email, mensagem) VALUES ('$nome', '$sobrenome', '$email', '$mensagem')";
+                    $sql = "INSERT INTO dados (nome, sobrenome, email, mensagem, data_post, nascimento) VALUES ('$nome', '$sobrenome', '$email', '$mensagem', '$data', '$nascimento')";
 
                     if (mysqli_query($conecta, $sql)) {
                         echo "<h5>" . $nome . ' agradecemos a sua mensagem! Aguarde um e-mail em seu e-mail para confirmar que recebemos seus dados, e brevemente será respondido.' . "</h5>";
@@ -40,27 +45,9 @@
                         echo "Erro " . $sql . "<br>" . mysqli_error($conecta);
                     }
                  }
-
-            $corpo_email = "<html>
-                                Olá, $nome, estamos enviando este e-mail para confirmar que recebemos a sua reclamação em nossa ouvidoria.<br><br>A Prefeitura Municipal de Hello World agradece o seu tempo, e tão brevemente se compromete a responder este e-mail.</html>
-                            ";
-
-            $remetente = "contato@saveweb.com.br";
-            $destino = $email;
-            $assunto = "OUVIDORIA: Sua reclamação foi recebida!";
-
-            $headers  = 'MIME-Version: 1.0' . "\r\n";
-            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-            $headers .= 'From: $nome <$email>';
-
-            $disparaEmail = mail($destino, $assunto, $corpo_email, $headers);
-
-            } else {
-                echo "<h5>Não há dados para serem enviados :(</h5>";
-            }
-
-
+                 mysqli_close($conecta);
+                }
         ?>
         </div>
     </section> 
-</body> 
+</body>

@@ -27,18 +27,19 @@
         </div>
 
         <?php 
-                $consulta = "SELECT * FROM dados";
+                $consulta = "SELECT * FROM dados ORDER BY id_form DESC LIMIT 5";
 
                 $resultado = mysqli_query($conecta, $consulta);
         
           while ($dado = mysqli_fetch_array($resultado)) {
+              $idade = 2021 - $dado['nascimento'];
                     echo "
                         <div id='registros'>
                             <div class='reg-foto'>
                                 <img src='estilos/foto-perfil.jpg' />
                             </div>
                             <div class='reg-mensagem'>
-                                <strong> " . $dado['nome'] . $dado['sobrenome'] . " </strong> disse:<br> " . 
+                                <strong> " . $dado['nome'] . "</strong> (" . $idade . " anos) disse em " . $dado['data_post'] . "<br> " . 
                                 $dado['mensagem'] . "
                             </div>
                     </div>

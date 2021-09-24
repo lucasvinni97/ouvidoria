@@ -34,7 +34,20 @@
                 <label>E-mail</label>
                     <input type="email" name="email" /><br />
                 <label>Sua mensagem/reclamação</label><br /><br />
-                    <textarea type="text" name="mensagem" rows="10"></textarea><br /><br /><br />
+                    <textarea type="text" name="mensagem" rows="10"></textarea>
+                <label>Ano de Nascimento</label>
+                    <select name="nascimento">
+                        <?php 
+                        for ($ano = date("Y"); $ano <= 2021 && $ano > 1921; $ano -= 1) {
+                                    
+                        echo '<option name="nascimento" value="'. $ano .'">' .
+                            $ano . '
+                        </option>';
+                            } 
+                        ?>
+                    </select>
+                    
+                    <br /><br /><br />
                 <center><input type="submit" name="enviar" value="Enviar" /></center>
             </form>
         </div>
@@ -49,15 +62,16 @@
                 <img src="estilos/foto-perfil.jpg" />
             </div>
             <?php 
-                $consulta = mysqli_query($conecta, "SELECT * FROM dados ORDER BY id_form DESC LIMIT 1");
+                $consulta = mysqli_query($conecta, "SELECT * FROM dados ORDER BY id_form DESC LIMIT 2");
 
-                $exibe = mysqli_fetch_array($consulta);
+            $exibe = mysqli_fetch_array($consulta);
 
             if (isset($exibe)) {
-                echo "<div class='reg-mensagem'><strong style='font-size:20px;font-family: Poppins-Bold'>" . $exibe['nome'] . " " . $exibe['sobrenome'] . "</strong> disse:<br> <span style='font-family: Poppins-Light'>" . $exibe['mensagem'] . "</span></div>";
+                echo "<div class='reg-mensagem'><strong style='font-size:20px;font-family: Poppins-Bold'>" . $exibe['nome'] . " " . $exibe['sobrenome'] . "</strong> em <i>" . $exibe['data_post'] . " </i> disse:<br> <span style='font-family: Poppins-Light'>" . $exibe['mensagem'] . "</span></div>";
             } else {
                 echo "Ainda não há dados...";
             }
+            mysqli_close($conecta);
             ?>
         </div>
     </section>
